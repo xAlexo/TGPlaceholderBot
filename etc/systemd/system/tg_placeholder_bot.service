@@ -1,0 +1,15 @@
+[Unit]
+Description=Бот заглушка
+After=network-online.target
+
+[Service]
+User=release
+Group=release
+EnvironmentFile=/etc/conf.d/tg_placeholder_bot
+WorkingDirectory=/run
+ExecStart=/usr/bin/python3 -m tgplaceholderbot
+Restart=always
+RestartSec=60
+
+[Install]
+WantedBy=multi-user.target

@@ -26,7 +26,7 @@ jobs:
 
   Release:
     needs: Quality
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main' && !contains(github.event.head_commit.message, 'chore(release):')
+    if: github.event_name == 'pull_request' || (github.event_name == 'push' && github.ref == 'refs/heads/main' && !contains(github.event.head_commit.message, 'chore(release):'))
     runs-on: ubuntu-latest
     steps:
       - uses: actions/setup-python@v2
@@ -35,10 +35,9 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
       - name: Semantic Release
-        env:
-          GH_TOKEN: ${{ secrets.GH_TOKEN }}
-        run: |
-          pip install python-semantic-release
-          git config user.name github-actions
-          git config user.email github-actions@github.com
-          semantic-release publish
+        uses: python-semantic-release/python-semantic-release@v10.7.0
+        with:
+          github_token: ${{ secrets.GH_TOKEN }}
+          git_committer_name: github-actions
+          git_committer_email: github-actions@github.com
+          no_operation_mode: ${{ github.event_name == 'pull_request' }}

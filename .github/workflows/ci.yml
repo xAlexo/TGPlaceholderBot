@@ -35,6 +35,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
         with:
+          fetch-depth: 0
           ref: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.ref || github.ref }}
       - name: Semantic Release
         uses: python-semantic-release/python-semantic-release@v10.7.0

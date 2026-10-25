@@ -2,17 +2,20 @@ name: CI
 on:
   push:
     branches: [ main ]
-  pull_request:
-    branches: [ main ]
   pull_request_target:
     branches: [ main ]
 
 jobs:
   Quality:
-    if: github.event_name != 'pull_request_target'
+    permissions:
+      contents: read
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
+      with:
+        repository: ${{ github.event.pull_request.head.repo.full_name || github.repository }}
+        ref: ${{ github.event.pull_request.head.sha || github.ref }}
+        persist-credentials: false
     - uses: actions/setup-python@v2
       with:
         python-version: '3.10'
@@ -48,6 +51,7 @@ jobs:
           git_committer_email: github-actions@github.com
 
   ReleasePreview:
+    needs: Quality
     if: github.event_name == 'pull_request_target'
     runs-on: ubuntu-latest
     permissions:

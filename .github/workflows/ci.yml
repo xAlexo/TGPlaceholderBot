@@ -43,6 +43,7 @@ jobs:
         with:
           fetch-depth: 0
           ref: ${{ github.event.pull_request.base.ref || github.ref }}
+          token: ${{ secrets.GH_TOKEN }}
       - name: Semantic Release
         uses: python-semantic-release/python-semantic-release@v10.7.0
         with:

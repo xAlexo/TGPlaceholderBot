@@ -9,7 +9,9 @@ message = os.getenv('TG_MESSAGE')
 
 
 if __name__ == '__main__':
-    bot = TelegramClient('tg_placeholder_bot', api_id, api_hash)
+    bot = TelegramClient(
+        'tg_placeholder_bot', api_id, api_hash, connection_retries=None, retry_delay=30
+    )
     bot.start(bot_token=tg_bot_token)
 
     @bot.on(events.NewMessage())
